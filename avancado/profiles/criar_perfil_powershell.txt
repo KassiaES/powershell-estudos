@@ -1,0 +1,323 @@
+COMO CRIAR UM PERFIL POWERSHELL ESPECÍFICO
+Guia para criar Microsoft.PowerShell_profile.ps1
+
+═══════════════════════════════════════════════════════════════════════════════
+
+TIPOS DE PERFIL POWERSHELL
+═══════════════════════════
+
+O PowerShell tem 4 tipos de perfil em ordem de precedência:
+
+1. AllUsersAllHosts       - Para todos usuários, todos hosts
+2. AllUsersCurrentHost    - Para todos usuários, host atual  
+3. CurrentUserAllHosts    - Para usuário atual, todos hosts
+4. CurrentUserCurrentHost - Para usuário atual, host atual (ESTE ARQUIVO)
+
+Microsoft.PowerShell_profile.ps1 = CurrentUserCurrentHost
+
+═══════════════════════════════════════════════════════════════════════════════
+
+1. VERIFICAR PERFIL ATUAL
+═════════════════════════
+
+# Mostrar caminho do perfil principal
+$PROFILE
+
+# Verificar se existe
+Test-Path $PROFILE
+
+# Mostrar todos os tipos de perfil
+$PROFILE | Get-Member -Type NoteProperty
+
+# Verificar status de cada perfil
+$PROFILE.PSObject.Properties | ForEach-Object {
+    $exists = Test-Path $_.Value
+    $status = if($exists) { "✓" } else { "✗" }
+    Write-Host "  $status $($_.Name): $($_.Value)"
+}
+
+═══════════════════════════════════════════════════════════════════════════════
+
+2. CRIAR O PERFIL PASSO A PASSO
+══════════════════════════════
+
+PASSO 1: Verificar se o diretório existe
+────────────────────────────────────────
+$profileDir = Split-Path $PROFILE -Parent
+if (!(Test-Path $profileDir)) {
+    New-Item -Path $profileDir -ItemType Directory -Force
+}
+
+PASSO 2: Criar o arquivo do perfil
+─────────────────────────────────
+New-Item -Path $PROFILE -ItemType File -Force
+
+═══════════════════════════════════════════════════════════════════════════════
+
+3. CONTEÚDO PARA O PERFIL
+════════════════════════
+
+OPÇÃO 1: PERFIL BÁSICO
+──────────────────────
+# Perfil PowerShell - Configuração Básica
+# Criado em: (data atual)
+# Usuário: $env:USERNAME
+
+# Mensagem de boas-vindas
+Write-Host "Bem-vindo, $env:USERNAME!" -ForegroundColor Green
+Write-Host "PowerShell $($PSVersionTable.PSVersion) carregado." -ForegroundColor Cyan
+
+# Aliases úteis
+New-Alias -Name ll -Value Get-ChildItem -Description "Lista detalhada"
+New-Alias -Name grep -Value Select-String -Description "Busca texto"
+New-Alias -Name touch -Value New-Item -Description "Cria arquivo vazio"
+
+# Variáveis úteis
+$MyDocs = [Environment]::GetFolderPath("MyDocuments")
+$Desktop = [Environment]::GetFolderPath("Desktop")
+
+Write-Host "Perfil básico carregado!" -ForegroundColor Yellow
+
+
+OPÇÃO 2: PERFIL AVANÇADO
+───────────────────────
+# Perfil PowerShell - Configuração Avançada
+# Criado em: (data atual)
+# Usuário: $env:USERNAME
+
+# Configurações do console
+$Host.UI.RawUI.WindowTitle = "PowerShell - $env:USERNAME@$env:COMPUTERNAME"
+
+# Mensagem personalizada
+Write-Host "╔══════════════════════════════════════╗" -ForegroundColor Cyan
+Write-Host "║       PowerShell Personalizado       ║" -ForegroundColor Cyan  
+Write-Host "║          Usuário: $env:USERNAME" -ForegroundColor Cyan
+Write-Host "║          Versão: $($PSVersionTable.PSVersion)" -ForegroundColor Cyan
+Write-Host "╚══════════════════════════════════════╝" -ForegroundColor Cyan
+
+# Aliases avançados
+New-Alias -Name ll -Value Get-ChildItem
+New-Alias -Name la -Value "Get-ChildItem -Force"
+New-Alias -Name grep -Value Select-String
+New-Alias -Name which -Value Get-Command
+New-Alias -Name df -Value Get-PSDrive
+
+# Função para obter IP público
+function Get-PublicIP {
+    try {
+        $ip = (Invoke-RestMethod -Uri "http://ifconfig.me/ip" -TimeoutSec 5).Trim()
+        Write-Host "IP Público: $ip" -ForegroundColor Green
+        return $ip
+    } catch {
+        Write-Host "Erro ao obter IP público: $($_.Exception.Message)" -ForegroundColor Red
+    }
+}
+
+# Função de informações do sistema
+function Get-SystemInfo {
+    Write-Host "=== INFORMAÇÕES DO SISTEMA ===" -ForegroundColor Yellow
+    Write-Host "Computador: $env:COMPUTERNAME"
+    Write-Host "Usuário: $env:USERNAME" 
+    Write-Host "Sistema: $((Get-CimInstance Win32_OperatingSystem).Caption)"
+    Write-Host "Arquitetura: $env:PROCESSOR_ARCHITECTURE"
+    Write-Host "PowerShell: $($PSVersionTable.PSVersion)"
+}
+
+# Prompt personalizado
+function prompt {
+    $path = $PWD.Path.Replace($HOME, "~")
+    Write-Host "[" -NoNewline -ForegroundColor DarkGray
+    Write-Host $env:USERNAME -NoNewline -ForegroundColor Green
+    Write-Host "@" -NoNewline -ForegroundColor DarkGray
+    Write-Host $env:COMPUTERNAME -NoNewline -ForegroundColor Blue
+    Write-Host "] " -NoNewline -ForegroundColor DarkGray
+    Write-Host $path -ForegroundColor Yellow
+    return "PS> "
+}
+
+Write-Host "Perfil avançado carregado! Use 'Get-SystemInfo'" -ForegroundColor Green
+
+
+OPÇÃO 3: PERFIL CORPORATIVO
+──────────────────────────
+# Perfil PowerShell Corporativo
+# Criado em: (data atual)
+# Usuário: $env:USERNAME
+# Domínio: $env:USERDOMAIN
+
+# Configurações corporativas
+$Host.UI.RawUI.WindowTitle = "PowerShell Corp - $env:USERNAME"
+
+# Log de inicialização
+$logPath = "$env:TEMP\PowerShell_Login_Log.txt"
+"[$(Get-Date)] Usuário $env:USERNAME logou no PowerShell" | Out-File -FilePath $logPath -Append
+
+Write-Host "PowerShell Corporativo - $env:USERDOMAIN" -ForegroundColor Blue
+Write-Host "Usuário: $env:USERNAME | Computador: $env:COMPUTERNAME" -ForegroundColor Gray
+
+# Funções administrativas
+function Get-DiskSpace {
+    Get-PSDrive -PSProvider FileSystem | Select-Object Name, 
+        @{n="Size(GB)";e={[math]::Round($_.Used/1GB + $_.Free/1GB,2)}},
+        @{n="Used(GB)";e={[math]::Round($_.Used/1GB,2)}},
+        @{n="Free(GB)";e={[math]::Round($_.Free/1GB,2)}},
+        @{n="Free(%)";e={[math]::Round(($_.Free/($_.Used+$_.Free))*100,2)}}
+}
+
+function Get-Services-Critical {
+    $critical = @("BITS", "EventLog", "PlugPlay", "RpcSs", "lanmanserver", "Spooler")
+    Get-Service $critical | Format-Table Name, Status, StartType -AutoSize
+}
+
+# Verificações de segurança
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    Write-Host "⚠ Executando sem privilégios de administrador" -ForegroundColor Yellow
+} else {
+    Write-Host "✓ Executando como administrador" -ForegroundColor Green
+}
+
+Write-Host "Perfil corporativo carregado. Use 'Get-DiskSpace'" -ForegroundColor Cyan
+
+═══════════════════════════════════════════════════════════════════════════════
+
+4. COMO CRIAR O PERFIL
+═════════════════════
+
+MÉTODO 1: Criar manualmente
+──────────────────────────
+1. New-Item -Path $PROFILE -ItemType File -Force
+2. notepad $PROFILE
+3. Copiar e colar um dos conteúdos acima
+4. Salvar e fechar
+5. Reiniciar PowerShell
+
+MÉTODO 2: Criar via comando
+──────────────────────────
+# Para perfil básico:
+@'
+# Seu conteúdo aqui (copiar da seção acima)
+'@ | Out-File -FilePath $PROFILE -Encoding UTF8
+
+MÉTODO 3: Usando VS Code
+───────────────────────
+1. code $PROFILE
+2. Colar conteúdo desejado
+3. Salvar (Ctrl+S)
+4. Reiniciar PowerShell
+
+═══════════════════════════════════════════════════════════════════════════════
+
+5. COMANDOS ÚTEIS PARA GERENCIAR PERFIL
+══════════════════════════════════════
+
+EDITAR O PERFIL:
+───────────────
+notepad $PROFILE      # Usar Notepad
+code $PROFILE         # Usar VS Code (se disponível)
+
+FAZER BACKUP:
+────────────
+$backupPath = "$PROFILE.backup_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
+Copy-Item $PROFILE $backupPath
+
+TESTAR SINTAXE:
+──────────────
+# Verificar se o perfil tem erros
+$null = [System.Management.Automation.PSParser]::Tokenize((Get-Content $PROFILE -Raw), [ref]$null)
+
+RECARREGAR PERFIL:
+─────────────────
+. $PROFILE            # Recarrega sem reiniciar PowerShell
+
+VERIFICAR SE EXISTE:
+───────────────────
+Test-Path $PROFILE
+
+VER CONTEÚDO:
+────────────
+Get-Content $PROFILE
+
+═══════════════════════════════════════════════════════════════════════════════
+
+6. TROUBLESHOOTING
+═════════════════
+
+PROBLEMA: Perfil não carrega
+──────────────────────────
+SOLUÇÃO:
+1. Verificar Execution Policy: Get-ExecutionPolicy
+2. Configurar se necessário: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+PROBLEMA: Erro de sintaxe
+────────────────────────
+SOLUÇÃO:
+1. Testar: $null = [System.Management.Automation.PSParser]::Tokenize((Get-Content $PROFILE -Raw), [ref]$null)
+2. Editar e corrigir: notepad $PROFILE
+
+PROBLEMA: Perfil muito lento
+──────────────────────────
+SOLUÇÃO:
+1. Remover imports desnecessários
+2. Usar Import-Module apenas quando necessário
+3. Evitar operações pesadas na inicialização
+
+PROBLEMA: Aliases não funcionam
+──────────────────────────────
+SOLUÇÃO:
+1. Usar New-Alias em vez de Set-Alias
+2. Verificar se já existem aliases com mesmo nome: Get-Alias
+
+═══════════════════════════════════════════════════════════════════════════════
+
+7. EXEMPLO RÁPIDO PASSO A PASSO
+══════════════════════════════
+
+1. Abrir PowerShell
+2. Executar: Test-Path $PROFILE
+   Se False, continuar para passo 3
+
+3. Executar: New-Item -Path $PROFILE -ItemType File -Force
+
+4. Executar: notepad $PROFILE
+
+5. Colar este conteúdo básico:
+   ────────────────────────────
+   # Meu Perfil PowerShell
+   Write-Host "Bem-vindo!" -ForegroundColor Green
+   New-Alias ll Get-ChildItem
+   New-Alias grep Select-String
+   $MyDocs = [Environment]::GetFolderPath("MyDocuments")
+   ────────────────────────────
+
+6. Salvar e fechar notepad
+
+7. Fechar PowerShell e abrir novamente
+
+8. Verificar se carregou com mensagem "Bem-vindo!"
+
+═══════════════════════════════════════════════════════════════════════════════
+
+LOCALIZAÇÃO DOS ARQUIVOS DE PERFIL:
+══════════════════════════════════
+
+CurrentUserCurrentHost:
+C:\Users\[USUARIO]\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
+
+CurrentUserAllHosts:
+C:\Users\[USUARIO]\Documents\WindowsPowerShell\profile.ps1
+
+AllUsersCurrentHost:
+C:\Windows\System32\WindowsPowerShell\v1.0\Microsoft.PowerShell_profile.ps1
+
+AllUsersAllHosts:
+C:\Windows\System32\WindowsPowerShell\v1.0\profile.ps1
+
+═══════════════════════════════════════════════════════════════════════════════
+
+IMPORTANTE:
+═══════════
+- O arquivo Microsoft.PowerShell_profile.ps1 é específico para o PowerShell Console
+- Para PowerShell ISE, use: Microsoft.PowerShellISE_profile.ps1
+- Para PowerShell 7, o caminho é diferente: Documents\PowerShell\
+- Sempre faça backup antes de modificações importantes
+- Teste o perfil após modificações para evitar erros na inicialização

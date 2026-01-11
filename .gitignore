@@ -1,0 +1,101 @@
+# .gitignore para Repositório PowerShell
+
+# ===== ARQUIVOS TEMPORÁRIOS =====
+*.tmp
+*.temp
+*~
+*.swp
+*.swo
+
+# ===== LOGS E OUTPUTS =====
+*.log
+*.out
+*.err
+logs/
+output/
+
+# ===== ARQUIVOS DE SISTEMA WINDOWS =====
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ===== POWERSHELL ESPECÍFICOS =====
+# Transcripts de sessão
+PowerShell_transcript*.txt
+
+# Arquivos de configuração temporários
+*.cfg.bak
+security_backup.cfg
+
+# Módulos baixados temporariamente
+Modules/
+
+# ===== CREDENCIAIS E SENHAS =====
+*.credential
+*.cred
+*.password
+*.key
+*.pem
+*.pfx
+config/credentials.xml
+secrets/
+.env
+
+# ===== BACKUPS =====
+*.bak
+*.backup
+*.old
+backup_*/
+backups/
+
+# ===== IDE E EDITORS =====
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# PowerShell ISE
+*.psess
+
+# ===== ARQUIVOS DE BUILD/OUTPUT =====
+bin/
+obj/
+publish/
+release/
+
+# ===== CACHE =====
+*.cache
+.cache/
+
+# ===== ARQUIVOS DE TESTE =====
+test-results/
+coverage/
+*.coverage
+
+# ===== ARQUIVOS ESPECÍFICOS DO PROJETO =====
+# Arquivo de teste local
+test_local.ps1
+desenvolvimento/
+rascunhos/
+
+# ===== CERTIFICADOS E CHAVES =====
+*.cer
+*.crt
+*.p7b
+*.p12
+
+# ===== DOCUMENTAÇÃO GERADA =====
+docs/_build/
+help/*.html
+*.chm
+
+# ===== ARQUIVOS GRANDES =====
+*.iso
+*.vhd
+*.vmdk
+
+# ===== SINCRONIZAÇÃO =====
+*.sync
