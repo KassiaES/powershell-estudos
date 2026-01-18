@@ -1,53 +1,44 @@
-# 📘 PowerShell - Repositório de Estudos
+# � PowerShell - Estudos e Automação
 
 ![PowerShell](https://img.shields.io/badge/PowerShell-5.1%20%7C%207.x-blue?logo=powershell)
 ![Windows](https://img.shields.io/badge/Windows-Compatible-blue?logo=windows)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-Um repositório completo para aprender PowerShell do básico ao avançado, com exemplos práticos, comparações com outras linguagens e guias de referência.
+Este repositório contém materiais de estudo e exemplos práticos de PowerShell, organizados em níveis progressivos de complexidade.
 
-## 📁 Estrutura do Repositório
+## 📁 Estrutura do Projeto
 
-```
-powershell-estudos/
-├── 📂 basico/
-│   ├── conceitos-fundamentais.md
-│   ├── comandos-essenciais.ps1
-│   └── primeiros-passos.md
-├── 📂 intermediario/
-│   ├── funcoes-personalizadas.ps1
-│   ├── gerenciamento-servicos.ps1
-│   └── manipulacao-arquivos.ps1
-├── 📂 avancado/
-│   ├── politicas-powershell.ps1
-│   ├── profiles/
-│   │   ├── criar-perfil.txt
-│   │   └── criar-perfil.ps1
-│   └── remoting-e-automation.ps1
-├── 📂 exemplos-praticos/
-│   ├── batch-vs-powershell/
-│   │   ├── test1.bat
-│   │   ├── test2.ps1
-│   │   └── test1.py
-│   ├── administracao-sistema/
-│   └── scripts-utilitarios/
-├── 📂 comparacoes/
-│   ├── powershell-vs-python.md
-│   ├── powershell-vs-bash.md
-│   └── cmdlets-vs-comandos.md
-├── 📂 referencias/
-│   ├── cheat-sheet.md
-│   ├── troubleshooting.md
-│   └── recursos-extras.md
-├── README.md
-└── LICENSE
-```
+### 📚 `/scripts-multiplataforma/` - Exercícios Iniciais
+Exercícios de estudo e comparação entre diferentes tecnologias:
+- **Batch Scripts (.bat)** - Scripts básicos para Windows
+- **PowerShell (.ps1)** - Scripts intermediários 
+- **Python (.py)** - Scripts para comparação
+- **README.md** - Documentação comparativa detalhada
 
-## 🎯 Objetivos de Aprendizagem
+**Foco**: Aprendizado inicial, comparações e conceitos básicos.
 
-- [x] **Fundamentos**: Cmdlets, pipeline, objetos
-- [x] **Administração**: Serviços, processos, registro
-- [x] **Políticas**: Execution Policy, Group Policy, Security
+### ⚡ `/avancado/` - Modelos de Solução
+Scripts PowerShell avançados e modelos de automação:
+- **gerar_html.ps1** - Geração de relatórios HTML com CSS
+- **gerar_json.ps1** - Múltiplos formatos de exportação (HTML/JSON/CSV)
+- **gerar_relatorio.ps1** - Script completo com timestamps e validações
+- **politicas_powershell.ps1** - Gerenciamento de políticas de execução
+- **/profiles/** - Configurações de perfil PowerShell
+- **/saidas/** - Pasta automática para todos os relatórios gerados
+
+**Foco**: Soluções profissionais, automação enterprise e boas práticas.
+
+## 🎯 Progressão de Aprendizado
+
+1. **Iniciante** → Comece em `/scripts-multiplataforma/`
+   - Compare diferentes abordagens
+   - Entenda os fundamentos
+   - Veja as vantagens do PowerShell
+
+2. **Avançado** → Explore `/avancado/`
+   - Scripts prontos para produção
+   - Padrões de código profissionais
+   - Automação completa
 - [x] **Perfis**: Criação e customização de perfis PowerShell
 - [x] **Comparações**: PowerShell vs Batch vs Python
 - [ ] **Remoting**: Gerenciamento remoto e PSSession
@@ -57,135 +48,90 @@ powershell-estudos/
 
 ## 🚀 Como Usar Este Repositório
 
-### Para Iniciantes
-1. Comece pela pasta `basico/`
-2. Execute os exemplos em `exemplos-praticos/`
-3. Use o `cheat-sheet.md` como referência
+## 🚀 Scripts Principais
 
-### Para Usuários Intermediários
-1. Explore a pasta `intermediario/`
-2. Estude as comparações em `comparacoes/`
-3. Implemente os scripts de `administracao-sistema/`
+| Script | Localização | Função |
+|--------|-------------|---------|
+| `listagem_exe.ps1` | 📁 Raiz | Lista arquivos .exe recursivamente |
+| `test1.bat` a `test5.ps1` | 📁 scripts-multiplataforma | Exercícios comparativos |
+| `gerar_*.ps1` | 📁 avancado | Geradores de relatório avançados |
 
-### Para Usuários Avançados
-1. Aprofunde-se na pasta `avancado/`
-2. Customize seus perfis usando `profiles/`
-3. Contribua com novos exemplos
+## 📊 Recursos dos Scripts Avançados
 
-## 📋 Conteúdo Disponível
+### ✨ Funcionalidades Incluídas:
+- ✅ **Geração automática de pastas**
+- ✅ **Múltiplos formatos de exportação** (HTML, JSON, CSV, TXT)
+- ✅ **Timestamps automáticos** nos arquivos
+- ✅ **Formatação CSS** para relatórios HTML
+- ✅ **Tratamento de erros** robusto
+- ✅ **Validação de dependências**
+- ✅ **Mensagens informativas**
 
-### ✅ Já Implementado
-
-| Arquivo | Descrição | Nível |
-|---------|-----------|-------|
-| `test1.bat` | Script batch original | Básico |
-| `test2.ps1` | Equivalente PowerShell do batch | Intermediário |
-| `test1.py` | Versão Python para comparação | Intermediário |
-| `politicas-powershell.ps1` | Guia completo de políticas | Avançado |
-| `criar-perfil.txt` | Documentação de perfis | Intermediário |
-| `criar-perfil.ps1` | Script para criar perfis | Avançado |
-
-### 🔄 Em Desenvolvimento
-
-- [ ] **Módulo de Logs**: Funções para manipulação de Event Logs
-- [ ] **Módulo de Rede**: Testes de conectividade e diagnósticos
-- [ ] **Módulo de Backup**: Scripts de backup automatizados
-- [ ] **Galeria de Snippets**: Trechos de código reutilizáveis
-- [ ] **Laboratório Virtual**: VMs e ambientes de teste
-
-## 🛠️ Exemplos Destacados
-
-### 1. Gerenciamento de Serviços
-```powershell
-# Reiniciar serviço remoto
-Invoke-Command -ComputerName "SERVER01" -ScriptBlock {
-    Restart-Service -Name "MeuServico" -Force
-}
+### 📁 Pasta `/saidas/`
+Todos os scripts avançados salvam automaticamente em:
+```
+/avancado/saidas/
+├── relatorio.html
+├── relatorio.json  
+├── relatorio.csv
+└── relatorio_YYYYMMDD_HHMMSS.*
 ```
 
-### 2. Criação de Perfil Personalizado
+## 🛠️ Como Usar
+
+### Exercícios Iniciais:
 ```powershell
-# Carregar funções do perfil
-New-PowerShellProfile -ProfileType Advanced
+cd scripts-multiplataforma
+.\test2.ps1
+.\test3.ps1
 ```
 
-### 3. Análise de Políticas de Segurança
+### Scripts Avançados:
 ```powershell
-# Verificar configurações de segurança
-.\politicas-powershell.ps1
+cd avancado
+
+# Gerar HTML simples
+.\gerar_html.ps1
+
+# Gerar múltiplos formatos
+.\gerar_json.ps1 HTML
+.\gerar_json.ps1 JSON
+.\gerar_json.ps1 CSV
+
+# Script completo com timestamp
+.\gerar_relatorio.ps1 -Formato HTML
+.\gerar_relatorio.ps1 -Formato JSON
 ```
+
+## 📈 Evolução do Aprendizado
+
+```
+📚 scripts-multiplataforma/     ⚡ avancado/
+├── Conceitos básicos     →    ├── Padrões profissionais
+├── Comparações          →    ├── Automação completa  
+├── Sintaxe simples      →    ├── Tratamento de erros
+└── Exercícios          →    └── Soluções prontas
+```
+
+## 💡 Próximos Passos
+
+- [ ] Módulos PowerShell customizados
+- [ ] Integração com APIs REST
+- [ ] Automação de deploy
+- [ ] Monitoramento de sistema
+- [ ] Análise de logs avançada
 
 ## 🔧 Requisitos
 
 - **Windows** 10/11 ou Windows Server 2016+
 - **PowerShell** 5.1+ (PowerShell 7.x recomendado)
-- **Privilégios** de administrador (para alguns scripts)
 - **Execution Policy** configurada:
   ```powershell
   Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
   ```
 
-## 🎓 Roteiro de Estudos Sugerido
 
-### Semana 1-2: Fundamentos
-- Conceitos básicos e cmdlets essenciais
-- Pipeline e objetos PowerShell
-- Comparação com Batch e CMD
-
-### Semana 3-4: Intermediário  
-- Funções e scripts personalizados
-- Gerenciamento de serviços e processos
-- Manipulação de arquivos e registro
-
-### Semana 5-6: Avançado
-- Políticas e segurança
-- Perfis personalizados
-- Remoting e automação
-
-### Semana 7-8: Prática
-- Projetos reais de administração
-- Criação de módulos próprios
-- Otimização e melhores práticas
-
-## 🤝 Como Contribuir
-
-1. **Fork** este repositório
-2. **Clone** seu fork localmente
-3. **Crie** uma branch para sua feature: `git checkout -b minha-feature`
-4. **Implemente** seus exemplos e documentação
-5. **Commit** suas mudanças: `git commit -m "Adiciona exemplo X"`
-6. **Push** para a branch: `git push origin minha-feature`
-7. **Abra** um Pull Request
-
-### Tipos de Contribuições Bem-vindas
-
-- ✨ **Novos exemplos** práticos
-- 📚 **Documentação** e explicações
-- 🐛 **Correções** de bugs nos scripts
-- 🔍 **Melhorias** na organização
-- 🌍 **Traduções** para outros idiomas
-- 💡 **Ideias** e sugestões via Issues
-
-## 📚 Recursos Externos
-
-- [Documentação Oficial PowerShell](https://docs.microsoft.com/pt-br/powershell/)
-- [PowerShell Gallery](https://www.powershellgallery.com/)
-- [PowerShell Community](https://github.com/PowerShell/PowerShell)
-- [TechNet Script Center](https://gallery.technet.microsoft.com/scriptcenter)
-
-## 📞 Contato e Suporte
-
-- **Issues**: Para relatar problemas ou sugerir melhorias
-- **Discussions**: Para perguntas gerais e discussões
-- **Wiki**: Documentação adicional e FAQs
-
-## 📄 Licença
-
-Este projeto está licenciado sob a **MIT License** - veja o arquivo [LICENSE](LICENSE) para detalhes.
-
-## 🙏 Agradecimentos
-
-- Comunidade PowerShell
+**🎯 Meta**: Dominar PowerShell desde conceitos básicos até automação enterprise!
 - Microsoft PowerShell Team
 - Todos os contribuidores deste repositório
 
