@@ -12,15 +12,15 @@ Write-Host "=======================================" -ForegroundColor Cyan
 Write-Host "Diretório: $diretorio" -ForegroundColor White
 Write-Host ""
 
-foreach ($item in $arquivos) {
-    Write-Host "Arquivo: $($item.Name)" -ForegroundColor Yellow
+foreach ($item in $arquivos.FullName) {
+    Write-Host "Arquivo: $($item)" -ForegroundColor Yellow
     
     # Calcular todos os hashes
-    $hashMD5 = Get-FileMD5 $item.FullName
-    $hashSHA1 = Get-FileSHA1 $item.FullName
-    $hashSHA256 = Get-FileSHA256 $item.FullName
-    $hashSHA384 = Get-FileSHA384 $item.FullName
-    $hashSHA512 = Get-FileSHA512 $item.FullName
+    $hashMD5 = Get-FileMD5 $item
+    $hashSHA1 = Get-FileSHA1 $item
+    $hashSHA256 = Get-FileSHA256 $item
+    $hashSHA384 = Get-FileSHA384 $item
+    $hashSHA512 = Get-FileSHA512 $item
     
     # Exibir todos os hashes
     Write-Host "  MD5:    $hashMD5" -ForegroundColor Green

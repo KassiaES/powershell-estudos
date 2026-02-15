@@ -38,6 +38,9 @@ Modules/
 *.key
 *.pem
 *.pfx
+*.clixml
+helix/itsm-cred.xml
+helix/*cred*.xml
 config/credentials.xml
 secrets/
 .env
@@ -101,3 +104,6 @@ help/*.html
 *.sync
 # Snyk Security Extension - AI Rules (auto-generated)
 .github/instructions/snyk_rules.instructions.md
+
+# Added by ggshield
+.cache_ggshield
