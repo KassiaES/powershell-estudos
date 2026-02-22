@@ -1,12 +1,15 @@
 # ShaFile.ps1 - Biblioteca pura de funções de hash
 # Não contém nenhuma lógica de exibição, apenas cálculos
 
-function Get-FileHash($filePath, $algoritmo) {
+function Get-FileHash {
 
-    if($null -ne $filePath) {
-        $fileContent = Get-Content $filePath
-        $fileBytes = [System.Text.Encoding]::UTF8.GetBytes($fileContent)
+    param(
+        [Parameter (ValueFromPipeline = $true)]
+        [string]$filePath,
+        [string]$algoritmo
+    )
 
+    begin {
         # Criar o objeto de hash baseado no algoritmo passado
         $hashProvider = switch ($algoritmo.ToUpper()) {
             "MD5"    { New-Object System.Security.Cryptography.MD5CryptoServiceProvider }
@@ -16,68 +19,119 @@ function Get-FileHash($filePath, $algoritmo) {
             "SHA512" { New-Object System.Security.Cryptography.SHA512Managed }
             default  { throw "Algoritmo não suportado: $algoritmo" }
         }
+    }
 
-        # Calcular o hash
-        $hash = $hashProvider.ComputeHash($fileBytes)
-
-        # Construir string do hash (sua forma original)
-        $prettyhashSB = New-Object System.Text.StringBuilder
-        foreach ($byte in $hash) {
-            $hexaNotation = $byte.ToString("x2")
-            $prettyhashSB.Append($hexaNotation) >> $null
+    process {
+        # Resolver caminho completo
+        $resolvedPath = Resolve-Path $filePath -ErrorAction SilentlyContinue
+        if (-not $resolvedPath) {
+            Write-Error "Caminho não encontrado: $filePath"
+            return
         }
 
-        return $prettyhashSB.ToString()
+        # Verificar se é um arquivo (não diretório)
+        if (-not (Test-Path $resolvedPath.Path -PathType Leaf)) {
+            Write-Error "O caminho especificado não é um arquivo: $($resolvedPath.Path)"
+            return
+        }
 
-    } else {
-        foreach ($item in $input) {        
+        try {
+            # Ler arquivo como bytes (funciona com arquivos binários)
+            $fileBytes = [System.IO.File]::ReadAllBytes($resolvedPath.Path)
+            
+            # Calcular o hash (especificar tipo byte[] explicitamente)
+            $hash = $hashProvider.ComputeHash([byte[]]$fileBytes)
 
-            $fileContent = Get-Content $item
-            $fileBytes = [System.Text.Encoding]::UTF8.GetBytes($fileContent)
-
-            # Criar o objeto de hash baseado no algoritmo passado
-            $hashProvider = switch ($algoritmo.ToUpper()) {
-                "MD5"    { New-Object System.Security.Cryptography.MD5CryptoServiceProvider }
-                "SHA1"   { New-Object System.Security.Cryptography.SHA1Managed }
-                "SHA256" { New-Object System.Security.Cryptography.SHA256Managed }
-                "SHA384" { New-Object System.Security.Cryptography.SHA384Managed }
-                "SHA512" { New-Object System.Security.Cryptography.SHA512Managed }
-                default  { throw "Algoritmo não suportado: $algoritmo" }
-            }
-
-            # Calcular o hash
-            $hash = $hashProvider.ComputeHash($fileBytes)
-
-            # Construir string do hash (sua forma original)
+            # Construir string do hash (StringBuilder local para cada arquivo)
             $prettyhashSB = New-Object System.Text.StringBuilder
             foreach ($byte in $hash) {
                 $hexaNotation = $byte.ToString("x2")
-                $prettyhashSB.Append($hexaNotation) >> $null
+                $prettyhashSB.Append($hexaNotation) | Out-Null
             }
 
-            return $prettyhashSB.ToString()
+            # Retornar hash sem usar return (para não quebrar pipeline)
+            $prettyhashSB.ToString()
+        }
+        catch {
+            Write-Error "Erro ao processar arquivo '$($resolvedPath.Path)': $($_.Exception.Message)"
+            return
         }
     }
+
+    end {
+        $hashProvider.Dispose()
+    }
+
     
 }
 
 # Funções específicas
-function Get-FileMD5($filePath) {
-    return Get-FileHash $filePath "MD5"
+function Get-FileMD5 {
+    param(
+        [Parameter(
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = "FullName",
+            Mandatory = $true
+        )]
+        [string]$filePath
+    )
+    process {
+        Get-FileHash $filePath "MD5"
+    }
 }
 
-function Get-FileSHA1($filePath) {
-    return Get-FileHash $filePath "SHA1"
+function Get-FileSHA1 {
+    param(
+        [Parameter(
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = "FullName",
+            Mandatory = $true
+        )]
+        [string]$filePath
+    )
+    process {
+        Get-FileHash $filePath "SHA1"
+    }
 }
 
-function Get-FileSHA256($filePath) {
-    return Get-FileHash $filePath "SHA256"
+function Get-FileSHA256 {
+    param(
+        [Parameter(
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = "FullName",
+            Mandatory = $true
+        )]
+        [string]$filePath
+    )
+    process {
+        Get-FileHash $filePath "SHA256"
+    }
 }
 
-function Get-FileSHA384($filePath) {
-    return Get-FileHash $filePath "SHA384"
+function Get-FileSHA384 {
+    param(
+        [Parameter(
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = "FullName",
+            Mandatory = $true
+            )]
+        [string]$filePath
+    )
+    process {
+        Get-FileHash $filePath "SHA384"
+    }
 }
 
-function Get-FileSHA512($filePath) {
-    return Get-FileHash $filePath "SHA512"
+function Get-FileSHA512 {
+    param(
+        [Parameter(
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = "FullName",
+            Mandatory = $true
+            )]
+        [string]$filePath
+    )
+    process {
+        Get-FileHash $filePath "SHA512"
+    }
 }
